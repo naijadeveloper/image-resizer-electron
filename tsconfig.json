@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": ["ES6"],
+    /* Modules */
+    "module": "commonjs",
+    "rootDir": "./src",
+    "outDir": "./entry/controller",
+                                    
+    "esModuleInterop": true,
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+  },
+  "include": ["src/**/*"]
+}

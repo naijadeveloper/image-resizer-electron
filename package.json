@@ -3,17 +3,24 @@
   "productName": "Image Resizer",
   "version": "1.0.0",
   "description": "An app to resize image dimensions",
-  "main": "main.js",
+  "main": "./entry/controller/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "dev": "concurrently \"tailwindcss -i ./src/styling/global.css -o ./entry/view/styling/global.css --watch\" \"tsc -w\" \"electron .\""
   },
   "keywords": [],
   "author": "Enoch Enujiugha",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^25.5.0"
+    "@types/node": "^20.5.0",
+    "@types/toastify-js": "^1.12.0",
+    "concurrently": "^8.2.0",
+    "electron": "^25.5.0",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
+    "electron-reload": "^2.0.0-alpha.1",
     "resize-img": "^2.0.0",
     "toastify-js": "^1.12.0"
   }
