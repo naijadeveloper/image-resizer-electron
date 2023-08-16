@@ -1,12 +1,7 @@
-import {app, BrowserWindow} from "electron";
+import { app, BrowserWindow, Menu } from "electron";
 import path from "path";
-import electronReload from "electron-reload";
 
 const isDevMode = process.env.NODE_ENV !== "production";
-
-if(isDevMode) {
-  electronReload(__dirname, {});
-}
 
 // to quit instead if its not
 const isMac = process.platform == "darwin";
@@ -14,8 +9,8 @@ const isMac = process.platform == "darwin";
 function createMainWindow() {
   const mainWindow = new BrowserWindow({
     title: "Image Resizer",
-    width: 500,
-    height: 600
+    width: isDevMode? 1000 : 500,
+    height: 700
   });
 
   //open devTools in dev mode
@@ -26,14 +21,38 @@ function createMainWindow() {
   mainWindow.loadFile(path.join(__dirname, "../view/index.html"));
 }
 
+
+// Menu template
+const menu = [
+  {
+    label: "File",
+    submenu: [
+      {
+        label: "Quit",
+        click: () => app.quit(),
+        accelerator: "CmdOrCtrl+Q"
+      }
+    ]
+  }
+];
+
+
+// when app is ready
 app.whenReady().then(() => {
   createMainWindow();
 
+  // implement menu
+  const mainMenu = Menu.buildFromTemplate(menu);
+  Menu.setApplicationMenu(mainMenu);
+
+  // register activate event on app
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
-  })
+  });
 });
 
+
+// close all windows
 app.on("window-all-closed", () => {
   if(!isMac) {
     app.quit();
