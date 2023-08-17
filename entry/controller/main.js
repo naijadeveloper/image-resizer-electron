@@ -20,23 +20,51 @@ function createMainWindow() {
     }
     mainWindow.loadFile(path_1.default.join(__dirname, "../view/index.html"));
 }
+// about window
+function createAboutWindow() {
+    const aboutWindow = new electron_1.BrowserWindow({
+        title: "Image Resizer",
+        width: 500,
+        height: 500,
+        webPreferences: {
+            preload: path_1.default.join(__dirname, "./preload.js")
+        }
+    });
+    aboutWindow.loadFile(path_1.default.join(__dirname, "../view/about.html"));
+}
 // Menu template
 const menu = [
+    ...(isMac ? [{
+            label: electron_1.app.name,
+            submenu: [{
+                    label: "About",
+                    click: createAboutWindow
+                }]
+        }] : []),
+    { role: "fileMenu" },
+    ...(!isMac ? [{
+            label: "Help",
+            submenu: [{
+                    label: "About",
+                    click: createAboutWindow
+                }]
+        }] : []),
     {
-        label: "File",
+        label: "leave",
         submenu: [
             {
                 label: "Quit",
-                click: () => electron_1.app.quit(),
+                click: electron_1.app.quit,
                 accelerator: "CmdOrCtrl+Q"
             }
         ]
     }
 ];
-// when app is ready
+// when app is ready..
 electron_1.app.whenReady().then(() => {
     createMainWindow();
     // implement menu
+    // @ts-ignore
     const mainMenu = electron_1.Menu.buildFromTemplate(menu);
     electron_1.Menu.setApplicationMenu(mainMenu);
     // register activate event on app

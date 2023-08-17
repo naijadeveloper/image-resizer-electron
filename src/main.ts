@@ -22,14 +22,47 @@ function createMainWindow() {
 }
 
 
+// about window
+function createAboutWindow() {
+  const aboutWindow = new BrowserWindow({
+    title: "Image Resizer",
+    width: 500,
+    height: 500,
+    webPreferences: {
+      preload: path.join(__dirname, "./preload.js")
+    }
+  });
+
+  aboutWindow.loadFile(path.join(__dirname, "../view/about.html"));
+}
+
+
 // Menu template
 const menu = [
+  ...(isMac? [{
+    label: app.name,
+    submenu: [{
+      label: "About",
+      click: createAboutWindow
+    }]
+  }] : []),
+
+  {role: "fileMenu"},
+  
+  ...(!isMac? [{
+    label: "Help",
+    submenu: [{
+      label: "About",
+      click: createAboutWindow
+    }]
+  }] : []),
+
   {
-    label: "File",
+    label: "leave",
     submenu: [
       {
         label: "Quit",
-        click: () => app.quit(),
+        click: app.quit,
         accelerator: "CmdOrCtrl+Q"
       }
     ]
@@ -37,11 +70,12 @@ const menu = [
 ];
 
 
-// when app is ready
+// when app is ready..
 app.whenReady().then(() => {
   createMainWindow();
 
   // implement menu
+  // @ts-ignore
   const mainMenu = Menu.buildFromTemplate(menu);
   Menu.setApplicationMenu(mainMenu);
 
