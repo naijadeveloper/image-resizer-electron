@@ -11,9 +11,14 @@ let mainWindow: BrowserWindow
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: "Image Resizer",
-    width: isDevMode? 1000 : 500,
+    width: isDevMode? 1000 : 460,
     height: 700,
     backgroundColor: "rgb(31, 41, 55)",
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: true,
+      preload: path.join(__dirname, "./preload.js")
+    }
   });
 
   //open devTools in dev mode
@@ -41,6 +46,8 @@ function createAboutWindow(parentwin: BrowserWindow) {
     modal: true,
     backgroundColor: "rgb(31, 41, 55)",
     webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: true,
       preload: path.join(__dirname, "./preload.js")
     }
   });

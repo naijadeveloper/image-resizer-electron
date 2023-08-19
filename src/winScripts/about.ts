@@ -15,10 +15,3 @@ pingBtn.addEventListener("click", async () => {
   const res =  await window.versions.ping();
   alert(`${res}`);
 });
-
-
-window.onbeforeunload = (e) => {
-  const val = confirm('Going? yes or no...');
-
-  e.returnValue = val;
-}

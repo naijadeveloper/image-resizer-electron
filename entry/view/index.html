@@ -13,33 +13,34 @@
 
 <body class="w-screen h-screen">
   <div class="h-full w-full bg-gray-800 text-gray-200 flex flex-col items-center justify-center">
-    <label for="img" class="w-[80%] sm:w-[50%] h-[200px] bg-gray-700 p-2 flex items-center justify-center rounded cursor-pointer">
-      <span class="flex bg-gray-700/50 p-2 rounded-md font-bold">SELECT AN IMAGE TO RESIZE</span>
+    <label id="bg-image" for="img" class="w-[80%] sm:w-[50%] h-[200px] bg-gray-700 p-2 flex items-center justify-center rounded cursor-pointer bg-[length:100%] bg-center bg-no-repeat drop-shadow-[0px_1px_2px_#030712] transition-all duration-300">
+      <span id="origin-dimensions" class="flex bg-gray-700 p-2 rounded-md font-bold">PLEASE SELECT AN IMAGE TO RESIZE</span>
       <input type="file" id="img" class="hidden" />
     </label>
 
     <!--FORM-->
-    <form id="img-form" class="w-full sm:w-[80%] mx-auto my-6 hidden">
+    <form id="img-form" class="w-full flex-col items-center justify-center sm:w-[80%] mx-auto my-6 hidden">
       <label class="w-full flex">
-        <input type="text" placeholder="New width" required id="width" class="border-none bg-gray-700 p-2 w-[90%] sm:w-[70%] h-[50px] text-gray-200 rounded mx-auto outline-none text-lg">
+        <input type="text" placeholder="New width" required id="width" class="border-none bg-gray-700 p-2 w-[90%] sm:w-[70%] h-[50px] text-gray-200 rounded mx-auto outline-none text-lg drop-shadow-[0px_1px_2px_#030712]">
       </label>
   
       <label class="w-full flex mt-6">
         <input type="text" placeholder="New height" required
-        id="height" class="border-none bg-gray-700 p-2 w-[90%] sm:w-[70%] h-[50px] text-gray-200 rounded mx-auto outline-none text-lg">
+        id="height" class="border-none bg-gray-700 p-2 w-[90%] sm:w-[70%] h-[50px] text-gray-200 rounded mx-auto outline-none text-lg drop-shadow-[0px_1px_2px_#030712]">
       </label>
       <!-- export const RE_DIGIT = new RegExp(/^\d+$/); -->
-      <button class="w-[80%] sm:w-[60%] h-[50px] mt-6 flex items-center justify-center bg-gray-700 p-2 text-gray-200 rounded mx-auto hover:border text-lg">Resize</button>
+      <button title="Fill out both width and height" id="change-dimensions" class="relative w-[80%] sm:w-[60%] h-[50px] mt-6 flex items-center justify-center bg-gray-700 p-2 text-gray-200 rounded mx-auto text-lg drop-shadow-[0px_1px_2px_#030712] cursor-not-allowed">Resize</button>
+      <!-- hover:drop-shadow-[0px_0px_0px_#030712] hover:top-1 -->
     </form>
 
-    <div class="mt-6 hidden flex-col gap-4">
-      <p>
-        <span class="bg-gray-600/50 p-1 px-2 rounded">File:</span>
+    <div id="file-info" class="w-full mt-6 hidden flex-col px-2 gap-4">
+      <p class="w-[95%] mx-auto">
+        <span class="bg-gray-600/50 p-1 px-2 rounded drop-shadow-[0px_1px_2px_#030712]">Filename:</span>
         <strong id="filename"></strong>
       </p>
 
-      <p>
-        <span class="bg-gray-600/50 p-1 px-2 rounded">Output:</span>
+      <p class="w-[95%] mx-auto break-words">
+        <span class="bg-gray-600/50 p-1 px-2 rounded drop-shadow-[0px_1px_2px_#030712]">Output Folder:</span>
         <strong id="output-path"></strong>
       </p>
 

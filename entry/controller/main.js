@@ -13,9 +13,14 @@ let mainWindow;
 function createMainWindow() {
     mainWindow = new electron_1.BrowserWindow({
         title: "Image Resizer",
-        width: isDevMode ? 1000 : 500,
+        width: isDevMode ? 1000 : 460,
         height: 700,
         backgroundColor: "rgb(31, 41, 55)",
+        webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: true,
+            preload: path_1.default.join(__dirname, "./preload.js")
+        }
     });
     //open devTools in dev mode
     if (isDevMode) {
@@ -38,6 +43,8 @@ function createAboutWindow(parentwin) {
         modal: true,
         backgroundColor: "rgb(31, 41, 55)",
         webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: true,
             preload: path_1.default.join(__dirname, "./preload.js")
         }
     });
