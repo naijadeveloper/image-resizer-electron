@@ -12,11 +12,14 @@ const filename = document.querySelector("#filename") as HTMLSpanElement;
 const outputPath = document.querySelector("#output-path") as HTMLSpanElement;
 const outputPathParent = outputPath.parentElement as HTMLParagraphElement;
 
+let newWidth = "";
+let newHeight = "";
 
 // All event listeners
 img.addEventListener("change", loadImage);
-widthInput.addEventListener("keypress", handleWidthChange);
-heightInput.addEventListener("keypress", handleHeightChange);
+widthInput.addEventListener("keyup", handleWidthChange);
+heightInput.addEventListener("keyup", handleHeightChange);
+form.addEventListener("submit", handleWidthAndHeightSubmit);
 
 
 // Interface for Window object typing for Typescript
@@ -27,6 +30,10 @@ interface Window {
   
   path: {
     join: (...args: string[]) => string;
+  },
+
+  Toastify: {
+    toast: (options: Record<string, unknown>) => void;
   }
 }
 
@@ -38,7 +45,10 @@ function loadImage(this: HTMLInputElement, e: Event) {
   
   // if file selected is not an image
   if(!(file && acceptedImageTypes.includes(file.type))) {
-    originDim.textContent = `THAT IS NOT AN IMAGE`;
+    notify("error", "THAT IS NOT PART OF THE ACCEPTABLE LIST OF IMAGES (GIF/PNG/JPEG)");
+
+    newWidth = "";
+    newHeight = "";
 
     // Necessary cleanups when the file gotten isn't accepted
     form.classList.remove('flex');
@@ -53,7 +63,7 @@ function loadImage(this: HTMLInputElement, e: Event) {
     bgImage.classList.remove("border-gray-500");
     bgImage.classList.remove("hover:bg-[length:115%]");
 
-    setTimeout(() => {originDim.textContent = `PLEASE SELECT AN IMAGE TO RESIZE`;}, 2500)
+    originDim.textContent = `PLEASE SELECT AN IMAGE TO RESIZE`;
     originDim.classList.remove("border-2");
     originDim.classList.remove("border-gray-900");
 
@@ -96,14 +106,73 @@ function loadImage(this: HTMLInputElement, e: Event) {
   outputPath.textContent = window.path.join(window.os.homedir(), "imageResizer");
 }
 
+
+//
 function handleWidthChange(this: HTMLInputElement, e: Event) {
-  const valueArry = this.value.split("");
-  if(!Number(valueArry[valueArry.length - 1])) {
-    valueArry.pop();
-    this.value = valueArry.join("");
+  const valueArry = this.value.trim().split("");
+  const newValueArry = valueArry.filter((value) => {
+    if(isNaN(Number(value)) || value == "" || value == " ") return false;
+    return true;
+  });
+  this.value = newValueArry.join("").trim();
+  newWidth = newValueArry.join("").trim();
+
+  // change button status if both width and height have values now
+  if((newWidth && newHeight) && (newWidth !== "0" && newHeight !== "0")){
+    changeDim.classList.remove("cursor-not-allowed");
+    changeDim.classList.add("hover:drop-shadow-[0px_0px_0px_#030712]");
+    changeDim.classList.add("hover:top-1");
+    changeDim.title = ""
+  }else {
+    changeDim.classList.add("cursor-not-allowed");
+    changeDim.classList.remove("hover:drop-shadow-[0px_0px_0px_#030712]");
+    changeDim.classList.remove("hover:top-1");
+    changeDim.title = "Fill out both width and height"
   }
 }
 
+
+//
 function handleHeightChange(this: HTMLInputElement, e: Event) {
-  
+  const valueArry = this.value.trim().split("");
+  const newValueArry = valueArry.filter((value) => {
+    if(isNaN(Number(value)) || value == "" || value == " ") return false;
+    return true;
+  });
+  this.value = newValueArry.join("").trim();
+  newHeight = newValueArry.join("").trim();
+
+  // change button status if both width and height have values now
+  if((newWidth && newHeight) && (newWidth !== "0" && newHeight !== "0")){
+    changeDim.classList.remove("cursor-not-allowed");
+    changeDim.classList.add("hover:drop-shadow-[0px_0px_0px_#030712]");
+    changeDim.classList.add("hover:top-1");
+    changeDim.title = ""
+  }else {
+    changeDim.classList.add("cursor-not-allowed");
+    changeDim.classList.remove("hover:drop-shadow-[0px_0px_0px_#030712]");
+    changeDim.classList.remove("hover:top-1");
+    changeDim.title = "Fill out both width and height"
+  }
+}
+
+
+//
+function handleWidthAndHeightSubmit(e: Event) {
+  e.preventDefault();
+  if((newWidth && newHeight) && (newWidth !== "0" && newHeight !== "0")) {
+    console.log(Number(newWidth), "::::", Number(newHeight));
+  }
+}
+
+
+// Helper functions
+// notify function
+function notify(type: "success"|"error", message: string) {
+  window.Toastify.toast({
+    text: message,
+    duration: 5000,
+    close: false,
+    className: `fixed flex items-center justify-center top-1 left-1 w-[50%] min-h-[30px] rounded p-2 ${type == "success"? "bg-green-700" : "bg-red-700"} text-gray-200 font-bold text-center mx-auto inset-x-0 drop-shadow-[0px_0.5px_1px_#030712]`,
+  });
 }
