@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const extraInfo = document.querySelector("#extra-info");
 const pingBtn = document.querySelector("#ping-btn");
-extraInfo.textContent = `The version of node used is ${window.versions.node()} and the version of electron is ${window.versions.electron()} and that of chrome is ${window.versions.chrome()}`;
+extraInfo.textContent = `The version of node used is ${window.versions.node} and the version of electron is ${window.versions.electron} and that of chrome is ${window.versions.chrome}`;
 pingBtn.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield window.versions.ping();
     alert(`${res}`);

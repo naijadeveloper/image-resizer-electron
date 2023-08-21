@@ -9,9 +9,13 @@ const ipcmain_handlers_1 = require("./helpers/ipcmain-handlers");
 const isDevMode = process.env.NODE_ENV !== "production";
 // to quit instead if its not
 const isMac = process.platform == "darwin";
+// all windows
 let mainWindow;
+let aboutWindow;
+// about window id
+let aboutid;
 function createMainWindow() {
-    mainWindow = new electron_1.BrowserWindow({
+    const mainWindow = new electron_1.BrowserWindow({
         title: "Image Resizer",
         width: isDevMode ? 1000 : 460,
         height: 700,
@@ -32,8 +36,6 @@ function createMainWindow() {
     mainWindow.loadFile(path_1.default.join(__dirname, "../view/index.html"));
     return mainWindow;
 }
-// about window
-let aboutid;
 function createAboutWindow(parentwin) {
     const aboutWindow = new electron_1.BrowserWindow({
         title: "Image Resizer",
@@ -45,7 +47,7 @@ function createAboutWindow(parentwin) {
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: true,
-            preload: path_1.default.join(__dirname, "./preload.js")
+            preload: path_1.default.join(__dirname, "./aboutPreload.js")
         }
     });
     aboutWindow.removeMenu();
@@ -77,12 +79,12 @@ const menu = [
                     label: "About",
                     click: () => {
                         if (aboutid) {
-                            const aboutwin = electron_1.BrowserWindow.fromId(aboutid);
-                            aboutwin === null || aboutwin === void 0 ? void 0 : aboutwin.show();
+                            aboutWindow = electron_1.BrowserWindow.fromId(aboutid);
+                            aboutWindow === null || aboutWindow === void 0 ? void 0 : aboutWindow.show();
                         }
                         else {
-                            const aboutwin = createAboutWindow(mainWindow);
-                            aboutid = aboutwin.id;
+                            aboutWindow = createAboutWindow(mainWindow);
+                            aboutid = aboutWindow.id;
                         }
                     }
                 }]
@@ -100,9 +102,9 @@ const menu = [
 ];
 // when app is ready..
 electron_1.app.whenReady().then(() => {
-    createMainWindow();
+    mainWindow = createMainWindow();
     // register events
-    (0, ipcmain_handlers_1.allHandlers)();
+    (0, ipcmain_handlers_1.allHandlers)(mainWindow);
     // implement menu
     // @ts-ignore
     const mainMenu = electron_1.Menu.buildFromTemplate(menu);

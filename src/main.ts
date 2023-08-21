@@ -7,9 +7,14 @@ const isDevMode = process.env.NODE_ENV !== "production";
 // to quit instead if its not
 const isMac = process.platform == "darwin";
 
-let mainWindow: BrowserWindow
+// all windows
+let mainWindow: BrowserWindow | null;
+let aboutWindow: BrowserWindow | null;
+// about window id
+let aboutid: number;
+
 function createMainWindow() {
-  mainWindow = new BrowserWindow({
+  const mainWin = new BrowserWindow({
     title: "Image Resizer",
     width: isDevMode? 1000 : 460,
     height: 700,
@@ -23,22 +28,24 @@ function createMainWindow() {
 
   //open devTools in dev mode
   if(isDevMode) {
-    mainWindow.webContents.openDevTools();
+    mainWin.webContents.openDevTools();
   }
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-  })
+  mainWin.once('ready-to-show', () => {
+    mainWin.show();
+  });
 
-  mainWindow.loadFile(path.join(__dirname, "../view/index.html"));
-  return mainWindow;
+  mainWin.on("closed", () => {
+    mainWindow = null;
+  });
+
+  mainWin.loadFile(path.join(__dirname, "../view/index.html"));
+  return mainWin;
 }
 
 
-// about window
-let aboutid: number;
 function createAboutWindow(parentwin: BrowserWindow) {
-  const aboutWindow = new BrowserWindow({
+  const aboutWin = new BrowserWindow({
     title: "Image Resizer",
     width: 700,
     height: 500,
@@ -48,25 +55,29 @@ function createAboutWindow(parentwin: BrowserWindow) {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: true,
-      preload: path.join(__dirname, "./preload.js")
+      preload: path.join(__dirname, "./aboutPreload.js")
     }
   });
 
-  aboutWindow.removeMenu();
+  aboutWin.removeMenu();
+
   if(isDevMode){
-    aboutWindow.webContents.openDevTools();
+    aboutWin.webContents.openDevTools();
   }
-  aboutWindow.loadFile(path.join(__dirname, "../view/about.html"));
 
-  aboutWindow.on("close", () => {
+  aboutWin.loadFile(path.join(__dirname, "../view/about.html"));
+  
+  aboutWin.once('ready-to-show', () => {
+    aboutWin.show();
+  });
+
+  aboutWin.on("closed", () => {
     aboutid = 0;
+    aboutWindow = null
   });
 
-  aboutWindow.once('ready-to-show', () => {
-    aboutWindow.show();
-  });
 
-  return aboutWindow;
+  return aboutWin;
 }
 
 
@@ -88,11 +99,11 @@ const menu = [
       label: "About",
       click: () => {
         if(aboutid){
-          const aboutwin = BrowserWindow.fromId(aboutid);
-          aboutwin?.show();
+          aboutWindow = BrowserWindow.fromId(aboutid);
+          aboutWindow?.show();
         }else {
-          const aboutwin = createAboutWindow(mainWindow);
-          aboutid = aboutwin.id;
+          aboutWindow = createAboutWindow(mainWindow as BrowserWindow);
+          aboutid = aboutWindow.id;
         }
       }
     }]
@@ -113,10 +124,10 @@ const menu = [
 
 // when app is ready..
 app.whenReady().then(() => {
-  createMainWindow();
+  mainWindow = createMainWindow();
 
   // register events
-  allHandlers();
+  allHandlers(mainWindow);
   // implement menu
   // @ts-ignore
   const mainMenu = Menu.buildFromTemplate(menu);

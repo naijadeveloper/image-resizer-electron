@@ -12,8 +12,11 @@ const filename = document.querySelector("#filename") as HTMLSpanElement;
 const outputPath = document.querySelector("#output-path") as HTMLSpanElement;
 const outputPathParent = outputPath.parentElement as HTMLParagraphElement;
 
+// data needed to resize the image
 let newWidth = "";
 let newHeight = "";
+let imgPath = ""
+
 
 // All event listeners
 img.addEventListener("change", loadImage);
@@ -34,6 +37,11 @@ interface Window {
 
   Toastify: {
     toast: (options: Record<string, unknown>) => void;
+  },
+
+  ipcRend: {
+    send: (channel: string, data: any) => void;
+    on: (channel: string, func: (...args: any[]) => any) => void;
   }
 }
 
@@ -41,6 +49,7 @@ interface Window {
 // All Event handlers in order
 function loadImage(this: HTMLInputElement, e: Event) {
   let file: File | null = this.files? this.files[0] : null;
+  if(file){imgPath = file.path}
   const acceptedImageTypes = ['image/gif', 'image/png', "image/jpeg"];
   
   // if file selected is not an image
@@ -160,8 +169,16 @@ function handleHeightChange(this: HTMLInputElement, e: Event) {
 //
 function handleWidthAndHeightSubmit(e: Event) {
   e.preventDefault();
-  if((newWidth && newHeight) && (newWidth !== "0" && newHeight !== "0")) {
-    console.log(Number(newWidth), "::::", Number(newHeight));
+  if((newWidth && newHeight && imgPath) && (newWidth !== "0" && newHeight !== "0")) {
+    // console.log(Number(newWidth), "::::", Number(newHeight), ":::", imgPath);
+    // send info about image to main process
+    window.ipcRend.send("image:resize", {
+      newWidth,
+      newHeight,
+      imgPath
+    });
+  }else {
+    notify("error", "THE WIDTH AND/OR HEIGHT CAN'T BE 0");
   }
 }
 
@@ -171,8 +188,14 @@ function handleWidthAndHeightSubmit(e: Event) {
 function notify(type: "success"|"error", message: string) {
   window.Toastify.toast({
     text: message,
-    duration: 5000,
+    duration: 3500,
     close: false,
     className: `fixed flex items-center justify-center top-1 left-1 w-[50%] min-h-[30px] rounded p-2 ${type == "success"? "bg-green-700" : "bg-red-700"} text-gray-200 font-bold text-center mx-auto inset-x-0 drop-shadow-[0px_0.5px_1px_#030712]`,
   });
 }
+
+
+/// ipc main event handling
+window.ipcRend.on("image:done", (args: any) => {
+  notify("success", `New image was saved to ${args}`);
+});
