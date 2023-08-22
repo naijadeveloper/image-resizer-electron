@@ -190,12 +190,12 @@ function notify(type: "success"|"error", message: string) {
     text: message,
     duration: 3500,
     close: false,
-    className: `fixed flex items-center justify-center top-1 left-1 w-[50%] min-h-[30px] rounded p-2 ${type == "success"? "bg-green-700" : "bg-red-700"} text-gray-200 font-bold text-center mx-auto inset-x-0 drop-shadow-[0px_0.5px_1px_#030712]`,
+    className: `fixed flex items-center justify-center break-words top-1 left-1 w-[50%] min-h-[30px] rounded p-2 ${type == "success"? "bg-green-700" : "bg-red-700"} text-gray-200 font-bold text-center mx-auto inset-x-0 drop-shadow-[0px_0.5px_1px_#030712]`,
   });
 }
 
 
 /// ipc main event handling
 window.ipcRend.on("image:done", (args: any) => {
-  notify("success", `New image was saved to ${args}`);
+  notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
 });

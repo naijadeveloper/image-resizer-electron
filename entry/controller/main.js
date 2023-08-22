@@ -15,7 +15,7 @@ let aboutWindow;
 // about window id
 let aboutid;
 function createMainWindow() {
-    const mainWindow = new electron_1.BrowserWindow({
+    const mainWin = new electron_1.BrowserWindow({
         title: "Image Resizer",
         width: isDevMode ? 1000 : 460,
         height: 700,
@@ -28,16 +28,19 @@ function createMainWindow() {
     });
     //open devTools in dev mode
     if (isDevMode) {
-        mainWindow.webContents.openDevTools();
+        mainWin.webContents.openDevTools();
     }
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show();
+    mainWin.once('ready-to-show', () => {
+        mainWin.show();
     });
-    mainWindow.loadFile(path_1.default.join(__dirname, "../view/index.html"));
-    return mainWindow;
+    mainWin.on("closed", () => {
+        mainWindow = null;
+    });
+    mainWin.loadFile(path_1.default.join(__dirname, "../view/index.html"));
+    return mainWin;
 }
 function createAboutWindow(parentwin) {
-    const aboutWindow = new electron_1.BrowserWindow({
+    const aboutWin = new electron_1.BrowserWindow({
         title: "Image Resizer",
         width: 700,
         height: 500,
@@ -50,18 +53,19 @@ function createAboutWindow(parentwin) {
             preload: path_1.default.join(__dirname, "./aboutPreload.js")
         }
     });
-    aboutWindow.removeMenu();
+    aboutWin.removeMenu();
     if (isDevMode) {
-        aboutWindow.webContents.openDevTools();
+        aboutWin.webContents.openDevTools();
     }
-    aboutWindow.loadFile(path_1.default.join(__dirname, "../view/about.html"));
-    aboutWindow.on("close", () => {
+    aboutWin.loadFile(path_1.default.join(__dirname, "../view/about.html"));
+    aboutWin.once('ready-to-show', () => {
+        aboutWin.show();
+    });
+    aboutWin.on("closed", () => {
         aboutid = 0;
+        aboutWindow = null;
     });
-    aboutWindow.once('ready-to-show', () => {
-        aboutWindow.show();
-    });
-    return aboutWindow;
+    return aboutWin;
 }
 // Menu template
 const menu = [
