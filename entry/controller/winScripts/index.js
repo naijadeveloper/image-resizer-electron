@@ -152,5 +152,5 @@ function notify(type, message) {
 }
 /// ipc main event handling
 window.ipcRend.on("image:done", (args) => {
-    notify("success", `New image was saved to ${args}`);
+    notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
 });
