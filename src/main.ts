@@ -26,7 +26,7 @@ function createMainWindow() {
     }
   });
 
-  //open devTools in dev mode
+  //open devTools in dev mode...
   if(isDevMode) {
     mainWin.webContents.openDevTools();
   }
