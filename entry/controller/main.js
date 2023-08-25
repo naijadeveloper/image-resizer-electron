@@ -26,7 +26,7 @@ function createMainWindow() {
             preload: path_1.default.join(__dirname, "./preload.js")
         }
     });
-    //open devTools in dev mode
+    //open devTools in dev mode...
     if (isDevMode) {
         mainWin.webContents.openDevTools();
     }
