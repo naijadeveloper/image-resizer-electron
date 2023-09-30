@@ -10,6 +10,7 @@ const fileInfo = document.querySelector("#file-info");
 const filename = document.querySelector("#filename");
 const outputPath = document.querySelector("#output-path");
 const outputPathParent = outputPath.parentElement;
+const loader = document.querySelector(".loader");
 // data needed to resize the image
 let newWidth = "";
 let newHeight = "";
@@ -135,6 +136,9 @@ function handleWidthAndHeightSubmit(e) {
             newHeight,
             imgPath
         });
+        // show loader
+        loader.classList.remove('hidden');
+        loader.classList.add("flex");
     }
     else {
         notify("error", "THE WIDTH AND/OR HEIGHT CAN'T BE 0");
@@ -147,10 +151,15 @@ function notify(type, message) {
         text: message,
         duration: 3500,
         close: false,
-        className: `fixed flex items-center justify-center break-words top-1 left-1 w-[50%] min-h-[30px] rounded p-2 ${type == "success" ? "bg-green-700" : "bg-red-700"} text-gray-200 font-bold text-center mx-auto inset-x-0 drop-shadow-[0px_0.5px_1px_#030712]`,
+        gravity: "bottom",
+        className: `z-30 fixed flex items-center justify-center break-words w-[50%] min-h-[30px] rounded p-2 ${type == "success" ? "bg-green-700" : "bg-red-700"} text-gray-200 font-bold text-center mx-auto inset-x-0 drop-shadow-[0px_0.5px_1px_#030712] toast`,
     });
 }
 /// ipc main event handling
 window.ipcRend.on("image:done", (args) => {
+    // hide loader
+    loader.classList.remove('flex');
+    loader.classList.add("hidden");
+    // show notification
     notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
 });

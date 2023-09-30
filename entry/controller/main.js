@@ -17,19 +17,22 @@ let aboutid;
 function createMainWindow() {
     const mainWin = new electron_1.BrowserWindow({
         title: "Image Resizer",
-        width: isDevMode ? 1000 : 460,
+        width: 500,
         height: 700,
         backgroundColor: "rgb(31, 41, 55)",
+        frame: false,
+        resizable: false,
         webPreferences: {
+            devTools: false,
             contextIsolation: true,
             nodeIntegration: true,
-            preload: path_1.default.join(__dirname, "./preload.js")
+            preload: path_1.default.join(__dirname, "./preload.js"),
         }
     });
     //open devTools in dev mode...
-    if (isDevMode) {
-        mainWin.webContents.openDevTools();
-    }
+    // if(isDevMode) {
+    //   mainWin.webContents.openDevTools();
+    // }
     mainWin.once('ready-to-show', () => {
         mainWin.show();
     });
@@ -42,12 +45,13 @@ function createMainWindow() {
 function createAboutWindow(parentwin) {
     const aboutWin = new electron_1.BrowserWindow({
         title: "Image Resizer",
-        width: 700,
+        width: 460,
         height: 500,
         parent: parentwin,
         modal: true,
         backgroundColor: "rgb(31, 41, 55)",
         webPreferences: {
+            devTools: false,
             contextIsolation: true,
             nodeIntegration: true,
             preload: path_1.default.join(__dirname, "./aboutPreload.js")

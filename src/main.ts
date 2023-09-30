@@ -16,20 +16,23 @@ let aboutid: number;
 function createMainWindow() {
   const mainWin = new BrowserWindow({
     title: "Image Resizer",
-    width: isDevMode? 1000 : 460,
+    width: 500,
     height: 700,
     backgroundColor: "rgb(31, 41, 55)",
+    frame: false,
+    resizable: false,
     webPreferences: {
+      devTools: false,
       contextIsolation: true,
       nodeIntegration: true,
-      preload: path.join(__dirname, "./preload.js")
+      preload: path.join(__dirname, "./preload.js"),
     }
   });
 
   //open devTools in dev mode...
-  if(isDevMode) {
-    mainWin.webContents.openDevTools();
-  }
+  // if(isDevMode) {
+  //   mainWin.webContents.openDevTools();
+  // }
 
   mainWin.once('ready-to-show', () => {
     mainWin.show();
@@ -47,12 +50,13 @@ function createMainWindow() {
 function createAboutWindow(parentwin: BrowserWindow) {
   const aboutWin = new BrowserWindow({
     title: "Image Resizer",
-    width: 700,
+    width: 460,
     height: 500,
     parent: parentwin,
     modal: true,
     backgroundColor: "rgb(31, 41, 55)",
     webPreferences: {
+      devTools: false,
       contextIsolation: true,
       nodeIntegration: true,
       preload: path.join(__dirname, "./aboutPreload.js")
@@ -135,7 +139,10 @@ app.whenReady().then(() => {
 
   // register activate event on app
   app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
+    if (BrowserWindow.getAllWindows().length === 0) {
+      mainWindow = createMainWindow();
+      allHandlers(mainWindow);
+    }
   });
 });
 

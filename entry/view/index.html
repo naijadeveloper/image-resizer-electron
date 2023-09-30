@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Image Resizer</title>
+  <title>Image Resize</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
@@ -12,9 +12,22 @@
 </head>
 
 <body class="w-screen h-screen">
+  <!-- close bar -->
+  <div class="z-40 flex fixed w-full top-0 left-0 bg-gray-900 drag-region">
+    <div class="flex-grow-[4] flex items-center pl-4">
+      <img src="../../assets/icons/Icon_32x32.png" alt="logo" />
+      <p class="text-3xl text-blue-300 pl-2">Image Resizer</p>
+    </div>
+    <div class="flex-grow-[1] flex justify-end">
+      <button class="w-[60px] h-[50px] no-drag-region text-gray-100 text-3xl flex items-center justify-center hover:bg-gray-700/30" title="minimize app">-</button>
+      <button class="w-[60px] h-[50px] no-drag-region text-gray-100 text-xl flex items-center justify-center hover:bg-red-700/70" title="close app">X</button>
+    </div>
+  </div>
+
+  
   <div class="h-full w-full bg-gray-800 text-gray-200 flex flex-col items-center justify-center">
     <label id="bg-image" for="img" class="w-[80%] sm:w-[50%] h-[200px] bg-gray-700 p-2 flex items-center justify-center rounded cursor-pointer bg-[length:100%] bg-center bg-no-repeat drop-shadow-[0px_1px_2px_#030712] transition-all duration-300">
-      <span id="origin-dimensions" class="flex bg-gray-700 p-2 rounded-md font-bold">PLEASE SELECT AN IMAGE TO RESIZE</span>
+      <span id="origin-dimensions" class="flex bg-gray-700 p-2 rounded-md font-bold text-center">PLEASE SELECT AN IMAGE TO RESIZE</span>
       <input type="file" id="img" class="hidden" />
     </label>
 
@@ -47,6 +60,13 @@
     </div>
   </div>
 
+  <!-- loader -->
+  <div class="loader fixed top-0 left-0 w-full h-full z-50 hidden items-center justify-center bg-gray-900/60">
+    <p class="text-5xl text-gray-100 font-bold animate-pulse flex flex-col text-center">
+      <span>Resizing...</span>
+      <span>Please wait!</span>
+    </p>
+  </div>
 </body>
 
 </html>
