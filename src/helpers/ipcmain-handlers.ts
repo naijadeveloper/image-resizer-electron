@@ -18,6 +18,20 @@ function handlersForTheHomeRenderer() {
     options.dest = path.join(os.homedir(), "imageResizer");
     resizer(options);
   });
+
+  ipcMain.on("minimize/main", (event, data) => {
+    const webContents = event.sender;
+    const window = BrowserWindow.fromWebContents(webContents);
+    window?.minimize();
+  });
+
+  ipcMain.on("close/main", (event, data) => {
+    // close all windows
+    const allWindows = BrowserWindow.getAllWindows();
+    for(let window of allWindows) {
+      window?.close();
+    }
+  });
 }
 
 

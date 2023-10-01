@@ -11,6 +11,8 @@ const filename = document.querySelector("#filename");
 const outputPath = document.querySelector("#output-path");
 const outputPathParent = outputPath.parentElement;
 const loader = document.querySelector(".loader");
+const minimize_app = document.querySelector("#minimize-app");
+const close_app = document.querySelector("#close-app");
 // data needed to resize the image
 let newWidth = "";
 let newHeight = "";
@@ -20,6 +22,8 @@ img.addEventListener("change", loadImage);
 widthInput.addEventListener("keyup", handleWidthChange);
 heightInput.addEventListener("keyup", handleHeightChange);
 form.addEventListener("submit", handleWidthAndHeightSubmit);
+minimize_app.addEventListener("click", handleMinimizing);
+close_app.addEventListener("click", handleClosing);
 // All Event handlers in order
 function loadImage(e) {
     let file = this.files ? this.files[0] : null;
@@ -163,3 +167,11 @@ window.ipcRend.on("image:done", (args) => {
     // show notification
     notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
 });
+// handle minimizing main window
+function handleMinimizing() {
+    window.ipcRend.send("minimize/main", {});
+}
+//handle closing main window
+function handleClosing() {
+    window.ipcRend.send("close/main", {});
+}

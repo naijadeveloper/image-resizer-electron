@@ -11,8 +11,9 @@ const fileInfo = document.querySelector("#file-info") as HTMLDivElement;
 const filename = document.querySelector("#filename") as HTMLSpanElement;
 const outputPath = document.querySelector("#output-path") as HTMLSpanElement;
 const outputPathParent = outputPath.parentElement as HTMLParagraphElement;
-
 const loader = <HTMLDivElement>document.querySelector(".loader");
+const minimize_app = <HTMLButtonElement>document.querySelector("#minimize-app");
+const close_app = <HTMLButtonElement>document.querySelector("#close-app");
 
 // data needed to resize the image
 let newWidth = "";
@@ -25,6 +26,8 @@ img.addEventListener("change", loadImage);
 widthInput.addEventListener("keyup", handleWidthChange);
 heightInput.addEventListener("keyup", handleHeightChange);
 form.addEventListener("submit", handleWidthAndHeightSubmit);
+minimize_app.addEventListener("click", handleMinimizing);
+close_app.addEventListener("click", handleClosing);
 
 
 // Interface for Window object typing for Typescript
@@ -210,3 +213,14 @@ window.ipcRend.on("image:done", (args: any) => {
   // show notification
   notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
 });
+
+
+// handle minimizing main window
+function handleMinimizing() {
+  window.ipcRend.send("minimize/main", {});
+}
+
+//handle closing main window
+function handleClosing() {
+  window.ipcRend.send("close/main", {});
+}

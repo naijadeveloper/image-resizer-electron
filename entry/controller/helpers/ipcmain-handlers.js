@@ -31,6 +31,18 @@ function handlersForTheHomeRenderer() {
         options.dest = path_1.default.join(os_1.default.homedir(), "imageResizer");
         resizer(options);
     });
+    electron_1.ipcMain.on("minimize/main", (event, data) => {
+        const webContents = event.sender;
+        const window = electron_1.BrowserWindow.fromWebContents(webContents);
+        window === null || window === void 0 ? void 0 : window.minimize();
+    });
+    electron_1.ipcMain.on("close/main", (event, data) => {
+        // close all windows
+        const allWindows = electron_1.BrowserWindow.getAllWindows();
+        for (let window of allWindows) {
+            window === null || window === void 0 ? void 0 : window.close();
+        }
+    });
 }
 //
 function handlersForTheAboutRenderer() {

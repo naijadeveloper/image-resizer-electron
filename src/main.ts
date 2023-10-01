@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu } from "electron";
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import path from "path";
 import { allHandlers } from "./helpers/ipcmain-handlers";
 
@@ -34,6 +34,10 @@ function createMainWindow() {
   //   mainWin.webContents.openDevTools();
   // }
 
+  // load UI to window's webcontents
+  mainWin.loadFile(path.join(__dirname, "../view/index.html"));
+
+  // handle events
   mainWin.once('ready-to-show', () => {
     mainWin.show();
   });
@@ -42,7 +46,7 @@ function createMainWindow() {
     mainWindow = null;
   });
 
-  mainWin.loadFile(path.join(__dirname, "../view/index.html"));
+  // return window's instance
   return mainWin;
 }
 

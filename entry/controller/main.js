@@ -33,13 +33,16 @@ function createMainWindow() {
     // if(isDevMode) {
     //   mainWin.webContents.openDevTools();
     // }
+    // load UI to window's webcontents
+    mainWin.loadFile(path_1.default.join(__dirname, "../view/index.html"));
+    // handle events
     mainWin.once('ready-to-show', () => {
         mainWin.show();
     });
     mainWin.on("closed", () => {
         mainWindow = null;
     });
-    mainWin.loadFile(path_1.default.join(__dirname, "../view/index.html"));
+    // return window's instance
     return mainWin;
 }
 function createAboutWindow(parentwin) {
@@ -119,8 +122,10 @@ electron_1.app.whenReady().then(() => {
     electron_1.Menu.setApplicationMenu(mainMenu);
     // register activate event on app
     electron_1.app.on('activate', () => {
-        if (electron_1.BrowserWindow.getAllWindows().length === 0)
-            createMainWindow();
+        if (electron_1.BrowserWindow.getAllWindows().length === 0) {
+            mainWindow = createMainWindow();
+            (0, ipcmain_handlers_1.allHandlers)(mainWindow);
+        }
     });
 });
 // close all windows
