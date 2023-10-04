@@ -13,6 +13,7 @@ const outputPathParent = outputPath.parentElement;
 const loader = document.querySelector(".loader");
 const minimize_app = document.querySelector("#minimize-app");
 const close_app = document.querySelector("#close-app");
+const open_about_win = document.querySelector("#open-about-win");
 // data needed to resize the image
 let newWidth = "";
 let newHeight = "";
@@ -24,6 +25,7 @@ heightInput.addEventListener("keyup", handleHeightChange);
 form.addEventListener("submit", handleWidthAndHeightSubmit);
 minimize_app.addEventListener("click", handleMinimizing);
 close_app.addEventListener("click", handleClosing);
+open_about_win.addEventListener("click", handleAboutWindowOpening);
 // All Event handlers in order
 function loadImage(e) {
     let file = this.files ? this.files[0] : null;
@@ -160,12 +162,12 @@ function notify(type, message) {
     });
 }
 /// ipc main event handling
-window.ipcRend.on("image:done", (args) => {
+window.ipcRend.on("image:done", (arg) => {
     // hide loader
     loader.classList.remove('flex');
     loader.classList.add("hidden");
     // show notification
-    notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
+    notify("success", `THE NEW IMAGE HAS BEEN SAVED ${arg}`);
 });
 // handle minimizing main window
 function handleMinimizing() {
@@ -174,4 +176,8 @@ function handleMinimizing() {
 //handle closing main window
 function handleClosing() {
     window.ipcRend.send("close/main", {});
+}
+//handle opening the about window
+function handleAboutWindowOpening() {
+    window.ipcRend.send("open/about", {});
 }

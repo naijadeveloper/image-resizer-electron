@@ -18,5 +18,5 @@ electron_1.contextBridge.exposeInMainWorld("Toastify", {
 });
 electron_1.contextBridge.exposeInMainWorld("ipcRend", {
     send: (channel, data) => electron_1.ipcRenderer.send(channel, data),
-    on: (channel, func) => electron_1.ipcRenderer.on(channel, (event, ...args) => func(...args))
+    on: (channel, func) => electron_1.ipcRenderer.on(channel, (event, arg) => func(arg))
 });

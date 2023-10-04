@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Image Resize</title>
+  <title>Main Window</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
@@ -26,7 +26,7 @@
 
   
   <div class="h-full w-full bg-gray-800 text-gray-200 flex flex-col items-center justify-center">
-    <label id="bg-image" for="img" class="w-[80%] sm:w-[50%] h-[200px] bg-gray-700 p-2 flex items-center justify-center rounded cursor-pointer bg-[length:100%] bg-center bg-no-repeat drop-shadow-[0px_1px_2px_#030712] transition-all duration-300">
+    <label title="click to select" id="bg-image" for="img" class="w-[80%] sm:w-[50%] h-[200px] bg-gray-700 p-2 flex items-center justify-center rounded cursor-pointer bg-[length:100%] bg-center bg-no-repeat drop-shadow-[0px_1px_2px_#030712] transition-all duration-300">
       <span id="origin-dimensions" class="flex bg-gray-700 p-2 rounded-md font-bold text-center">PLEASE SELECT AN IMAGE TO RESIZE</span>
       <input type="file" id="img" class="hidden" />
     </label>
@@ -66,6 +66,11 @@
       <span>Resizing...</span>
       <span>Please wait!</span>
     </p>
+  </div>
+
+  <!-- about btn -->
+  <div id="open-about-win" class="fixed bottom-0 right-0 p-2 flex items-center justify-center">
+    <button class="bg-gray-600/20 p-1 px-2 rounded text-gray-100 hover:bg-gray-600/30">About author and app</button>
   </div>
 </body>
 

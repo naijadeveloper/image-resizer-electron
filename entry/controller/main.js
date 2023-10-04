@@ -16,12 +16,12 @@ let aboutWindow;
 let aboutid;
 function createMainWindow() {
     const mainWin = new electron_1.BrowserWindow({
-        title: "Image Resizer",
         width: 500,
         height: 700,
         backgroundColor: "rgb(31, 41, 55)",
         frame: false,
         resizable: false,
+        icon: path_1.default.join(__dirname, '../../assets/icons/icon_32x32.png'),
         webPreferences: {
             devTools: false,
             contextIsolation: true,
@@ -38,6 +38,9 @@ function createMainWindow() {
     // handle events
     mainWin.once('ready-to-show', () => {
         mainWin.show();
+    });
+    mainWin.webContents.on("did-finish-load", () => {
+        mainWin.setTitle("Image Resizer");
     });
     mainWin.on("closed", () => {
         mainWindow = null;
@@ -112,14 +115,25 @@ const menu = [
     }
 ];
 // when app is ready..
+let tray;
 electron_1.app.whenReady().then(() => {
     mainWindow = createMainWindow();
     // register events
     (0, ipcmain_handlers_1.allHandlers)(mainWindow);
     // implement menu
     // @ts-ignore
-    const mainMenu = electron_1.Menu.buildFromTemplate(menu);
-    electron_1.Menu.setApplicationMenu(mainMenu);
+    // const mainMenu = Menu.buildFromTemplate(menu);
+    // Menu.setApplicationMenu(mainMenu);
+    //
+    // tray = new Tray(path.join(__dirname, '../../assets/icons/icon_32x32.png'))
+    // const contextMenu = Menu.buildFromTemplate([
+    //   { label: 'Item1', type: 'radio' },
+    //   { label: 'Item2', type: 'radio' },
+    //   { label: 'Item3', type: 'radio', checked: true },
+    //   { label: 'Item4', type: 'radio' }
+    // ])
+    // tray.setToolTip('This is my application.')
+    // tray.setContextMenu(contextMenu)
     // register activate event on app
     electron_1.app.on('activate', () => {
         if (electron_1.BrowserWindow.getAllWindows().length === 0) {

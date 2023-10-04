@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, Tray } from "electron";
 import path from "path";
 import { allHandlers } from "./helpers/ipcmain-handlers";
 
@@ -15,12 +15,12 @@ let aboutid: number;
 
 function createMainWindow() {
   const mainWin = new BrowserWindow({
-    title: "Image Resizer",
     width: 500,
     height: 700,
     backgroundColor: "rgb(31, 41, 55)",
     frame: false,
     resizable: false,
+    icon: path.join(__dirname, '../../assets/icons/icon_32x32.png'),
     webPreferences: {
       devTools: false,
       contextIsolation: true,
@@ -40,6 +40,10 @@ function createMainWindow() {
   // handle events
   mainWin.once('ready-to-show', () => {
     mainWin.show();
+  });
+
+  mainWin.webContents.on("did-finish-load", () => {
+    mainWin.setTitle("Image Resizer");
   });
 
   mainWin.on("closed", () => {
@@ -131,15 +135,28 @@ const menu = [
 
 
 // when app is ready..
+let tray;
 app.whenReady().then(() => {
   mainWindow = createMainWindow();
 
   // register events
   allHandlers(mainWindow);
+  
   // implement menu
   // @ts-ignore
-  const mainMenu = Menu.buildFromTemplate(menu);
-  Menu.setApplicationMenu(mainMenu);
+  // const mainMenu = Menu.buildFromTemplate(menu);
+  // Menu.setApplicationMenu(mainMenu);
+
+  //
+  // tray = new Tray(path.join(__dirname, '../../assets/icons/icon_32x32.png'))
+  // const contextMenu = Menu.buildFromTemplate([
+  //   { label: 'Item1', type: 'radio' },
+  //   { label: 'Item2', type: 'radio' },
+  //   { label: 'Item3', type: 'radio', checked: true },
+  //   { label: 'Item4', type: 'radio' }
+  // ])
+  // tray.setToolTip('This is my application.')
+  // tray.setContextMenu(contextMenu)
 
   // register activate event on app
   app.on('activate', () => {

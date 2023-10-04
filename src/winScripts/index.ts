@@ -14,6 +14,7 @@ const outputPathParent = outputPath.parentElement as HTMLParagraphElement;
 const loader = <HTMLDivElement>document.querySelector(".loader");
 const minimize_app = <HTMLButtonElement>document.querySelector("#minimize-app");
 const close_app = <HTMLButtonElement>document.querySelector("#close-app");
+const open_about_win = <HTMLButtonElement>document.querySelector("#open-about-win");
 
 // data needed to resize the image
 let newWidth = "";
@@ -28,6 +29,7 @@ heightInput.addEventListener("keyup", handleHeightChange);
 form.addEventListener("submit", handleWidthAndHeightSubmit);
 minimize_app.addEventListener("click", handleMinimizing);
 close_app.addEventListener("click", handleClosing);
+open_about_win.addEventListener("click", handleAboutWindowOpening);
 
 
 // Interface for Window object typing for Typescript
@@ -46,7 +48,7 @@ interface Window {
 
   ipcRend: {
     send: (channel: string, data: any) => void;
-    on: (channel: string, func: (...args: any[]) => any) => void;
+    on: (channel: string, func: (args: any) => any) => void;
   }
 }
 
@@ -205,13 +207,13 @@ function notify(type: "success"|"error", message: string) {
 
 
 /// ipc main event handling
-window.ipcRend.on("image:done", (args: any) => {
+window.ipcRend.on("image:done", (arg: any) => {
   // hide loader
   loader.classList.remove('flex');
   loader.classList.add("hidden");
 
   // show notification
-  notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
+  notify("success", `THE NEW IMAGE HAS BEEN SAVED ${arg}`);
 });
 
 
@@ -223,4 +225,10 @@ function handleMinimizing() {
 //handle closing main window
 function handleClosing() {
   window.ipcRend.send("close/main", {});
+}
+
+
+//handle opening the about window
+function handleAboutWindowOpening() {
+  window.ipcRend.send("open/about", {});
 }
