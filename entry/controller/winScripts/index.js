@@ -167,7 +167,7 @@ window.ipcRend.on("image:done", (arg) => {
     loader.classList.remove('flex');
     loader.classList.add("hidden");
     // show notification
-    notify("success", `THE NEW IMAGE HAS BEEN SAVED ${arg}`);
+    notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
 });
 // handle minimizing main window
 function handleMinimizing() {

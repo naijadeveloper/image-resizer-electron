@@ -34,8 +34,6 @@ function handlersForTheHomeRenderer() {
     electron_1.ipcMain.on("minimize/main", (event, data) => {
         const webContents = event.sender;
         const window = electron_1.BrowserWindow.fromWebContents(webContents);
-        console.log(window === null || window === void 0 ? void 0 : window.getTitle());
-        console.log(window === null || window === void 0 ? void 0 : window.webContents.getTitle());
         window === null || window === void 0 ? void 0 : window.minimize();
     });
     electron_1.ipcMain.on("close/main", (event, data) => {

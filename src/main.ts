@@ -63,19 +63,19 @@ function createAboutWindow(parentwin: BrowserWindow) {
     parent: parentwin,
     modal: true,
     backgroundColor: "rgb(31, 41, 55)",
+    resizable: false,
     webPreferences: {
       devTools: false,
       contextIsolation: true,
-      nodeIntegration: true,
-      preload: path.join(__dirname, "./aboutPreload.js")
+      nodeIntegration: true
     }
   });
 
   aboutWin.removeMenu();
 
-  if(isDevMode){
-    aboutWin.webContents.openDevTools();
-  }
+  // if(isDevMode){
+  //   aboutWin.webContents.openDevTools();
+  // }
 
   aboutWin.loadFile(path.join(__dirname, "../view/about.html"));
   
@@ -141,6 +141,10 @@ app.whenReady().then(() => {
 
   // register events
   allHandlers(mainWindow);
+
+  ipcMain.on("open/about", function(event, data) {
+    aboutWindow = createAboutWindow(mainWindow as BrowserWindow);
+  });
   
   // implement menu
   // @ts-ignore

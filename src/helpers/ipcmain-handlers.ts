@@ -22,8 +22,6 @@ function handlersForTheHomeRenderer() {
   ipcMain.on("minimize/main", (event, data) => {
     const webContents = event.sender;
     const window = BrowserWindow.fromWebContents(webContents);
-    console.log(window?.getTitle());
-    console.log(window?.webContents.getTitle());
     window?.minimize();
   });
 

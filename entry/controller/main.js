@@ -56,17 +56,17 @@ function createAboutWindow(parentwin) {
         parent: parentwin,
         modal: true,
         backgroundColor: "rgb(31, 41, 55)",
+        resizable: false,
         webPreferences: {
             devTools: false,
             contextIsolation: true,
-            nodeIntegration: true,
-            preload: path_1.default.join(__dirname, "./aboutPreload.js")
+            nodeIntegration: true
         }
     });
     aboutWin.removeMenu();
-    if (isDevMode) {
-        aboutWin.webContents.openDevTools();
-    }
+    // if(isDevMode){
+    //   aboutWin.webContents.openDevTools();
+    // }
     aboutWin.loadFile(path_1.default.join(__dirname, "../view/about.html"));
     aboutWin.once('ready-to-show', () => {
         aboutWin.show();
@@ -120,6 +120,9 @@ electron_1.app.whenReady().then(() => {
     mainWindow = createMainWindow();
     // register events
     (0, ipcmain_handlers_1.allHandlers)(mainWindow);
+    electron_1.ipcMain.on("open/about", function (event, data) {
+        aboutWindow = createAboutWindow(mainWindow);
+    });
     // implement menu
     // @ts-ignore
     // const mainMenu = Menu.buildFromTemplate(menu);

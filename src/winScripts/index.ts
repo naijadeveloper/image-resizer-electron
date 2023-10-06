@@ -213,7 +213,7 @@ window.ipcRend.on("image:done", (arg: any) => {
   loader.classList.add("hidden");
 
   // show notification
-  notify("success", `THE NEW IMAGE HAS BEEN SAVED ${arg}`);
+  notify("success", `THE NEW IMAGE HAS BEEN SAVED`);
 });
 
 
